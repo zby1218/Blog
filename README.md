@@ -1,3 +1,7 @@
+---
+
+---
+
 ## nodeJs搭建博客
 
 ### ES6使用
@@ -194,3 +198,33 @@ server.listen(3000,() =>{
 })
 ```
 
+#### blog路由接口开发
+
+> 文件名blog.js
+
+使用原生nodejs直接返回json数据，接口只返回数据，不进行操作，对数据返回与操作层做一个抽离。
+
+- 设置函数blogHandle，参数`req` `res`，函数对传入的路由及请求方式进行判断，返回一个数据对象
+- 使用`module.exports`将blogHandle函数导出
+
+#### user路由接口开发
+
+> 文件名user.js
+
+使用原生nodejs直接返回json数据，接口只返回数据，不进行操作，对数据返回与操作层做一个抽离。
+
+- 设置函数userHandle，参数`req` `res`，函数对传入的路由及请求方式进行判断，**返回一个数据对象**
+- 使用`module.exports`将userHandle函数导出
+
+> blog 与user属于不同的路由，因此尽管代码极其相似，不能加以复用。
+
+#### 接口返回数据处理
+
+> 文件名server.js
+
+- 通过require('./blog')获取两个路由接口函数
+- 设置函数serverHandle，此函数将对请求进行统一处理
+- 设置请求头res.setHeader('Content-type','application/json')
+- 获得请求的url，分割出请求路由path，添加到req上作为一个属性，起到了跨文件传输作用
+- **将接口函数返回的数据对象转换成JSON对象**
+- 使用`module.exports`将serverHandle函数导出
