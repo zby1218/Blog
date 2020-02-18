@@ -1,7 +1,29 @@
 //blog.js负责博客操作方面的路由
-const getList = require('./return');
+const {getList , getDetail} = require('./return');
+//这里遇到一个问题，尽管是const一个变量，但还是需要与其它文件中变量名称相同，否则报错：
+//TypeError:  is not a constructor
+const {SuccessModel , FalseModel} = require('./Model');
+
+//获得post请求数据流
+const getPostData = (req)=>{
+    //使用promise解决回调地狱
+    const promise = new Promise((resolve , reject)=>{
+
+        if(req.method !== 'GET'){
+            resolve({});
+            return;
+        }
+        if(req.header){
+            resolve({});
+            return;
+        }
+
+    })
+
+}
+
 const blogHandle = (req , res)=>{
-    const {SuccessModle , FalseModle} = require('./Model');
+
 
     const method = req.method;
     // const url = req.url;
@@ -10,16 +32,16 @@ const blogHandle = (req , res)=>{
         const author = req.query.author || '';
         const keyword = req.query.keyword || '';
         const listData = getList(author , keyword);
-        return new SuccessModle(listData );
+        console.log(SuccessModel);
+        
+        return new SuccessModel(listData );
 
     }
 
     if(method == "GET" && req.path == '/api/blog/detail'){
-
-        return {
-            msg:'获取博客内容'
-        }
-
+        const id = req.query.id || '';
+        const detailData = getDetail(id);
+        return new SuccessModel(detailData);
     }
     
     if(method == "POST" && req.path == '/api/blog/new'){
