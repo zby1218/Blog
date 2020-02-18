@@ -1,6 +1,7 @@
 //server.js负责对路由的处理
 const blogHandle = require('./blog');
 const userHandle = require('./user');
+const querystring = require('querystring');
 
 const serverHandle = (req , res)=>{
 
@@ -8,6 +9,9 @@ const serverHandle = (req , res)=>{
     res.setHeader('Content-type','application/json');
     const url = req.url;
     req.path = url.split('?')[0];
+
+    req.query = querystring.parse(url.split('?')[1]);
+
     //处理blog的路由
     const blogData = blogHandle(req , res);
     //根据是否有返回值来进行操作
