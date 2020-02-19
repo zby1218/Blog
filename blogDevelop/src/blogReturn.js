@@ -40,7 +40,34 @@ const getDetail = (id)=>{
 
 }
 
+//新增博客返回函数
+//es6新语法，参数声明时赋值
+const setBlog = (blogData = {})=>{
+
+    return {
+        id:3
+    }
+
+}
+//根据id进行修改，所以id是已知参数
+const updateBlog = (id , blogData = {})=>{
+    //返回一个布尔值，代表更新成功与否
+    return true
+
+}
+
+const delBlog = (id)=>{
+
+    return true;
+
+}
+
+
+
 module.exports = {
     getList,
-    getDetail
+    getDetail,
+    setBlog,
+    updateBlog,
+    delBlog
 }

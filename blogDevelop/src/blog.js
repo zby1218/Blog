@@ -1,30 +1,20 @@
 //blog.js负责博客操作方面的路由
-const {getList , getDetail} = require('./return');
+const {
+        getList , 
+        getDetail,
+        setBlog,
+        updateBlog,
+        delBlog
+    } = require('./blogReturn');
 //这里遇到一个问题，尽管是const一个变量，但还是需要与其它文件中变量名称相同，否则报错：
 //TypeError:  is not a constructor
 const {SuccessModel , FalseModel} = require('./Model');
 
-//获得post请求数据流
-const getPostData = (req)=>{
-    //使用promise解决回调地狱
-    const promise = new Promise((resolve , reject)=>{
 
-        if(req.method !== 'GET'){
-            resolve({});
-            return;
-        }
-        if(req.header){
-            resolve({});
-            return;
-        }
-
-    })
-
-}
 
 const blogHandle = (req , res)=>{
 
-
+    const id = req.query.id || '';
     const method = req.method;
     // const url = req.url;
     // const path = url.split('?')[0];
@@ -39,31 +29,38 @@ const blogHandle = (req , res)=>{
     }
 
     if(method == "GET" && req.path == '/api/blog/detail'){
-        const id = req.query.id || '';
+       
         const detailData = getDetail(id);
         return new SuccessModel(detailData);
     }
     
     if(method == "POST" && req.path == '/api/blog/new'){
-
-        return {
-            msg:'新增博客内容'
-        }
+        const data = setBlog(req.body);
+        return new SuccessModel(data);
 
     }
 
     if(method == "POST" && req.path == '/api/blog/update'){
-
-        return {
-            msg:'更新博客内容'
+        const judge = updateBlog(id , req.body);
+        //返回一个布尔值，布尔值将决定返回值
+        if(judge){
+            return new SuccessModel(judge);
         }
+        else{
+            return new FalseModel('博客更新失败');
+        }
+        
+
 
     }
 
     if(method == "POST" && path == '/api/blog/del'){
-
-        return {
-            msg:'删除博客内容'
+        const judge = delBlog(id);
+        if(judge){
+            return new SuccessModel(judge);
+        }
+        else{
+            return new FalseModel('博客删除失败');
         }
 
     }
