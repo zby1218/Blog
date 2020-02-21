@@ -8,11 +8,11 @@ const getPostData = (req)=>{
     //使用promise解决回调地狱
     const promise = new Promise((resolve , reject)=>{
 
-        if(req.method !== 'GET'){
+        if(req.method == 'GET'){
             resolve({});
             return;
         }
-        if(req.header['content-type'] !== 'application/json'){
+        if(req.headers['content-type'] !== 'application/json'){
             resolve({});
             return;
         }
@@ -21,14 +21,20 @@ const getPostData = (req)=>{
         req.on('data',(chunk)=>{
             postData += chunk;
         })
+        console.log('123123:',postData);
+        
         req.on('end',()=>{
             //如果postData没有值
             if(!postData){
                 resolve({});
                 return;
             }
+            console.log(postData)
             resolve(
+                
                 JSON.parse(postData)
+               
+                
             )
         })
     })
@@ -48,23 +54,49 @@ const serverHandle = (req , res)=>{
     getPostData(req).then((postData)=>{
         //此处将postData赋给body这样后面的路由都可以用到postData了
         req.body = postData;
-
+        console.log(req.body);
+        
          //处理blog的路由
-        const blogData = blogHandle(req , res);
-        //根据是否有返回值来进行操作
-        if(blogData){
-            res.end(
-                JSON.stringify(blogData)
-            )
-            return;
-        }
-        const userData = userHandle(req , res)
-        if(userData){
-            res.end(
-                JSON.stringify(userData)
-            )
-            return;
-        }
+         //在没有数据库前返回的是数据，现在返回的是promisse
+         const blogResult = blogHandle(req , res);
+         if(blogResult){
+           
+             
+             blogResult.then(blogData=>{
+                 res.end(
+                     JSON.stringify(blogData)
+                 )
+             })
+             return;
+         }
+        // const blogData = blogHandle(req , res);
+        // //根据是否有返回值来进行操作
+        // if(blogData){
+        //     res.end(
+        //         JSON.stringify(blogData)
+        //     )
+        //     return;
+        // }
+        const userResult = userHandle(req , res)
+         if(userResult){
+            
+             
+             userResult.then(userData=>{
+                 console.log(userData);
+                 
+                res.end(
+                    JSON.stringify(userData)
+                )
+             })
+             return;
+         }
+
+        // if(userResult){
+        //     res.end(
+        //         JSON.stringify(userResult)
+        //     )
+        //     return;
+        // }
 
         //如果没有对应的路由则返回404
         res.writeHead(404 , {'content-type':'text/plain'})

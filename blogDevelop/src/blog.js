@@ -18,50 +18,72 @@ const blogHandle = (req , res)=>{
     const method = req.method;
     // const url = req.url;
     // const path = url.split('?')[0];
+    //获得博客列表
     if(method == "GET" && req.path == '/api/blog/list'){
         const author = req.query.author || '';
         const keyword = req.query.keyword || '';
-        const listData = getList(author , keyword);
-        console.log(SuccessModel);
-        
-        return new SuccessModel(listData );
-
-    }
-
-    if(method == "GET" && req.path == '/api/blog/detail'){
+        const result = getList(author , keyword);
+        //这里用两个return暂时不能理解
+        return result.then((listData)=>{
+            return new SuccessModel(listData);
+        })
+        .catch(error =>{
+            console.log(error);
+            
+            
+        })
        
-        const detailData = getDetail(id);
-        return new SuccessModel(detailData);
+
     }
-    
+    //查询博客
+    if(method == "GET" && req.path == '/api/blog/detail'){
+       const result = getDetail(id);
+       return result.then(data=>{
+           return new SuccessModel(data);
+       })
+       
+    }
+    //新建博客
     if(method == "POST" && req.path == '/api/blog/new'){
-        const data = setBlog(req.body);
-        return new SuccessModel(data);
-
-    }
-
-    if(method == "POST" && req.path == '/api/blog/update'){
-        const judge = updateBlog(id , req.body);
-        //返回一个布尔值，布尔值将决定返回值
-        if(judge){
-            return new SuccessModel(judge);
-        }
-        else{
-            return new FalseModel('博客更新失败');
-        }
+        req.body.author = 'zhangsan';
+        
+        
+        const result = setBlog(req.body);
+        
+        return result.then(data=>{
+            return new SuccessModel(data);
+        })
         
 
+    }
+    //更新博客
+    if(method == "POST" && req.path == '/api/blog/update'){
+        const result = updateBlog(id , req.body);
+        //返回一个布尔值，布尔值将决定返回值
+        //return很重要，错在这里，没有返回值将影响外层
+        return result.then(judge=>{
+            console.log(`${judge}`);
+            console.log('true');
+            
+            if(judge){
+                return new SuccessModel('更新成功');
+            }
+            return new FalseModel('更新失败');
+        })
+
 
     }
-
-    if(method == "POST" && path == '/api/blog/del'){
-        const judge = delBlog(id);
-        if(judge){
-            return new SuccessModel(judge);
-        }
-        else{
-            return new FalseModel('博客删除失败');
-        }
+    //删除博客
+    if(method == "POST" && req.path == '/api/blog/del'){
+        const author = 'zhangsan';
+        const result = delBlog(id,author);
+        return result.then(judge=>{
+            if(judge){
+                return new SuccessModel('删除成功');
+            }
+            return new FalseModel('删除失败');
+        })
+       
 
     }
 

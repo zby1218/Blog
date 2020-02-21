@@ -17,6 +17,7 @@ class BaseModel {
 
 class SuccessModel extends BaseModel{
     constructor(data , message){
+        
         //ES6要求子类必须调用一次super，super就代表了父类的构造函数
         super(data , message);
         this.errno = 0;

@@ -13,10 +13,17 @@ const userHandle = (req , res)=>{
         //获取传入的用户名及密码
         const {username , password} = req.body;
         const result = login(username , password);
-        if(result){
-            return new SuccessModel(result);
-        }
-        return new FalseModel(result);
+        return result.then(data=>{
+            console.log(data.username);
+           
+            
+            if(data.username){
+                
+                return new SuccessModel('登录成功');
+            }
+            return new FalseModel('登录失败')
+        })
+
 
     }
 
