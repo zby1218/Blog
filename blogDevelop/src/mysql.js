@@ -13,7 +13,7 @@ con.connect();
 //数据库操作函数
 //这个函数因为需要发送sql语句，等待返回值，是异步操作
 const mysqlHandle = (sql)=>{
-    console.log(2333333);
+   
     
     const promise = new Promise((resolve , reject)=>{
         console.log(2342342);
@@ -23,11 +23,11 @@ const mysqlHandle = (sql)=>{
                 //有错误则返回错误
                 console.log(err);
                 
-                console.log(1992);
+                
                 
                 return;
             }
-            console.log(1933);
+           
             
             resolve(result);
         } )

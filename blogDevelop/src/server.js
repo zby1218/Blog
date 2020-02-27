@@ -56,7 +56,7 @@ const serverHandle = (req , res)=>{
     //cookie是一个字符串
     //cookie就保存在这里
     req.cookie = {}
-    const cookieStr = req.headers.coolie ||'';
+    const cookieStr = req.headers.cookie ||'';
     cookieStr.split(';').forEach(element => {
         //对cookie中没有值做处理
         if(!element){
@@ -66,7 +66,7 @@ const serverHandle = (req , res)=>{
         const key = arr[0];
         const value = arr[1];
         //有点像哈希表，是js中对象的一种表示方法
-        req.coolie[key] = value;
+        req.cookie[key] = value;
         
     });
 
