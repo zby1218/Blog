@@ -52,23 +52,7 @@ const serverHandle = (req , res)=>{
     //获取post数据流，将其保存在req.body中，因为getPostData对有无post数据都
     //进行了处理，所以可以将统一的返回值处理放到post数据流函数中
     
-    //解析cookie
-    //cookie是一个字符串
-    //cookie就保存在这里
-    req.cookie = {}
-    const cookieStr = req.headers.cookie ||'';
-    cookieStr.split(';').forEach(element => {
-        //对cookie中没有值做处理
-        if(!element){
-            return;
-        }
-        const arr = item.split('=');
-        const key = arr[0];
-        const value = arr[1];
-        //有点像哈希表，是js中对象的一种表示方法
-        req.cookie[key] = value;
-        
-    });
+
 
 
     getPostData(req).then((postData)=>{

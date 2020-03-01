@@ -74,7 +74,7 @@ const blogHandle = (req , res)=>{
 
     }
     //删除博客
-    if(method == "POST" && req.path == '/api/blog/del'){
+    if(method == "GET" && req.path == '/api/blog/del'){
         const author = 'zhangsan';
         const result = delBlog(id,author);
         return result.then(judge=>{
