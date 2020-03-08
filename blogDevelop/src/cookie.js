@@ -1,4 +1,4 @@
-const {sessionSet} = require('./session');
+const {sessionSet , sessionGet} = require('./session');
 //设置cookie函数，会在登录模块引用
 const cookieSet = (req , res )=>{
    //考虑到安全性问题，使用session存储数据，使用cookie来存储对session的索引
@@ -33,7 +33,11 @@ const cookieGet = (req , res)=>{
         const value = arr[1];
         //有点像哈希表，是js中对象的一种表示方法
         req.cookie[key] = value;
-        return true;
+        const sessionGetResult = sessionGet(req , res , key);
+        if(sessionGetResult){
+            return true
+        }
+        return false;
     });
 
 }
